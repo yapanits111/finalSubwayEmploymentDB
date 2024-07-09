@@ -28,7 +28,7 @@ def admin_login():
             st.error("Incorrect username or password")
 
 def display_dataframes():
-    st.subheader("Admin Panel")
+    st.subheader("Admin Panel", anchor = False)
 
     applicant_data = get_all_applicant_info()
     df1 = pd.DataFrame(applicant_data, columns=[
@@ -49,71 +49,75 @@ def display_dataframes():
     ])
 
     st.write("Employee Information")
-    st.dataframe(df1)
+    st.dataframe(df1, hide_index = True)
     st.write("Employment Histories")
-    st.dataframe(df2)
+    st.dataframe(df2, hide_index = True)
     st.write("References")
-    st.dataframe(df3)
+    st.dataframe(df3, hide_index = True)
 
 def update_applicant_details():
+    if 'applicant_info' not in st.session_state or st.session_state['applicant_info'] is None:
+        st.warning("No applicant information found.")
+        return
+
     applicant_info = st.session_state['applicant_info']
     employment_history = st.session_state['employment_history']
     references = st.session_state['references']
 
     st.write("Update Applicant Information")
 
-    st.subheader("*I. Personal Information*")
-    updated_name = st.text_input("Full Name", value=applicant_info["applicant_name"], key="applicant_name")
-    updated_tax_id = st.text_input("Tax ID Number", value=applicant_info["tax_ID_num"], key="tax_ID_num")
-    updated_address = st.text_input("Address", value=applicant_info["applicant_address"], key="applicant_address")
-    updated_tel_num = st.text_input("Phone Number", value=applicant_info["applicant_tel_num"], key="applicant_tel_num")
-    updated_age_verification = st.radio("16 Years or above?", ["Yes", "No"], index=0 if applicant_info["age_verification"] == "Yes" else 1, key="age_verification")
+    st.subheader("*I. Personal Information*", anchor = False)
+    updated_name = st.text_input("Full Name", value=applicant_info.get("applicant_name", ""), key="full_name")
+    updated_tax_id = st.text_input("Tax ID Number", value=applicant_info.get("tax_ID_num", ""), key="tax_ID_num")
+    updated_address = st.text_input("Address", value=applicant_info.get("applicant_address", ""), key="applicant_address")
+    updated_tel_num = st.text_input("Phone Number", value=applicant_info.get("applicant_tel_num", ""), key="applicant_tel_num")
+    updated_age_verification = st.radio("16 Years or above?", ["Yes", "No"], index=0 if applicant_info.get("age_verification", "Yes") == "Yes" else 1, key="age_verification")
 
-    st.subheader("*II. Emergency Contact*")
-    updated_emergency_name = st.text_input("Emergency Contact Name", value=applicant_info["emergency_name"], key="emergency_name")
-    updated_emergency_tel_num = st.text_input("Emergency Contact Number", value=applicant_info["emergency_tel_num"], key="emergency_tel_num")
-    updated_emergency_address = st.text_input("Contact Address", value=applicant_info["emergency_address"], key="emergency_address")
+    st.subheader("*II. Emergency Contact*", anchor = False)
+    updated_emergency_name = st.text_input("Emergency Contact Name", value=applicant_info.get("emergency_name", ""), key="emergency_name")
+    updated_emergency_tel_num = st.text_input("Emergency Contact Number", value=applicant_info.get("emergency_tel_num", ""), key="emergency_tel_num")
+    updated_emergency_address = st.text_input("Contact Address", value=applicant_info.get("emergency_address", ""), key="emergency_address")
 
-    st.subheader("*III. Availability*")
-    updated_position_type = st.radio("Position Type", ["Part Time", "Full Time", "Seasonal", "Temporary"], index=["Part Time", "Full Time", "Seasonal", "Temporary"].index(applicant_info["position_type"]), key="position_type")
-    updated_total_hours = st.number_input("Total Hours Available Per Week", value=int(applicant_info["total_hours"]), key="total_hours")
-    updated_date_availability = st.date_input("Date Available to Start Work", value=pd.to_datetime(applicant_info["date_availability"]), key="date_availability")
+    st.subheader("*III. Availability*", anchor = False)
+    updated_position_type = st.radio("Position Type", ["Part Time", "Full Time", "Seasonal", "Temporary"], index=["Part Time", "Full Time", "Seasonal", "Temporary"].index(applicant_info.get("position_type", "Part Time")), key="position_type")
+    updated_total_hours = st.number_input("Total Hours Available Per Week", value=int(applicant_info.get("total_hours", 0)), key="total_hours")
+    updated_date_availability = st.date_input("Date Available to Start Work", value=pd.to_datetime(applicant_info.get("date_availability", pd.Timestamp.now())), key="date_availability")
 
-    st.subheader("*IV. School Most Recent Attended*")
-    updated_school_name = st.text_input("School Name", value=applicant_info["school_name"], key="school_name")
-    updated_school_address = st.text_input("School Address", value=applicant_info["school_address"], key="school_address")
-    updated_school_tel_num = st.text_input("School Telephone Number", value=applicant_info["school_tel_num"], key="school_tel_num")
-    updated_counselor_name = st.text_input("Counselor Name", value=applicant_info["counselor_name"], key="counselor_name")
-    updated_grade_completed = st.radio("Last Grade Completed", ['Elementary', 'Junior High School', 'Senior High School', 'College'], index=['Elementary', 'Junior High School', 'Senior High School', 'College'].index(applicant_info["grade_completed"]), horizontal=True, key="grade_completed")
-    updated_GWA = st.number_input("Most Recent GWA", value=float(applicant_info["GWA"]), key="GWA")
-    updated_graduated = st.radio("Graduated?", ["Yes", "No"], index=0 if applicant_info["graduated"] == "Yes" else 1, key="graduated")
-    updated_enrolled = st.radio("Currently Enrolled?", ["Yes", "No"], index=0 if applicant_info["enrolled"] == "Yes" else 1, key="enrolled")
+    st.subheader("*IV. School Most Recent Attended*", anchor = False)
+    updated_school_name = st.text_input("School Name", value=applicant_info.get("school_name", ""), key="school_name")
+    updated_school_address = st.text_input("School Address", value=applicant_info.get("school_address", ""), key="school_address")
+    updated_school_tel_num = st.text_input("School Telephone Number", value=applicant_info.get("school_tel_num", ""), key="school_tel_num")
+    updated_counselor_name = st.text_input("Counselor Name", value=applicant_info.get("counselor_name", ""), key="counselor_name")
+    updated_grade_completed = st.radio("Last Grade Completed", ['Elementary', 'Junior High School', 'Senior High School', 'College'], index=['Elementary', 'Junior High School', 'Senior High School', 'College'].index(applicant_info.get("grade_completed", "Elementary")), horizontal=True, key="grade_completed")
+    updated_GWA = st.number_input("Most Recent GWA", value=float(applicant_info.get("GWA", 0.0)), key="GWA")
+    updated_graduated = st.radio("Graduated?", ["Yes", "No"], index=0 if applicant_info.get("graduated", "Yes") == "Yes" else 1, key="graduated")
+    updated_enrolled = st.radio("Currently Enrolled?", ["Yes", "No"], index=0 if applicant_info.get("enrolled", "Yes") == "Yes" else 1, key="enrolled")
 
     st.write("Update Employment History")
     updated_employment_history = []
     for i, emp in enumerate(employment_history):
-        st.subheader(f"*Employment Record {i+1}*")
-        emp['company_name'] = st.text_input(f"Company Name", value=emp['company_name'], key=f"company_name_{i+1}")
-        emp['company_address'] = st.text_input(f"Company Address", value=emp['company_address'], key=f"company_address_{i+1}")
-        emp['company_tel_num'] = st.text_input(f"Company Telephone Number", value=emp['company_tel_num'], key=f"company_tel_num_{i+1}")
-        emp['position'] = st.text_input(f"Position", value=emp['position'], key=f"position_{i+1}")
-        emp['supervisor'] = st.text_input(f"Supervisor", value=emp['supervisor'], key=f"supervisor_{i+1}")
-        emp['date_worked_from'] = st.date_input(f"Date Worked From", value=pd.to_datetime(emp['date_worked_from']), key=f"date_worked_from_{i+1}")
-        emp['date_worked_to'] = st.date_input(f"Date Worked To", value=pd.to_datetime(emp['date_worked_to']), key=f"date_worked_to_{i+1}")
-        emp['wage'] = st.number_input(f"Wage Per Month", value=int(emp['wage']), key=f"wage_{i+1}")
-        emp['mgnt_ref_ck'] = st.text_input(f"Management Reference Checked By", value=emp['mgnt_ref_ck'], key=f"mgnt_ref_ck_{i+1}")
-        emp['reason_for_leaving'] = st.text_input(f"Reason for Leaving", value=emp['reason_for_leaving'], key=f"reason_for_leaving_{i+1}")
-        emp['permission'] = st.radio(f"Permission to Contact", ["Yes", "No"], index=0 if emp['permission'] == "Yes" else 1, key=f"permission_{i+1}")
+        st.subheader(f"*Employment Record {i+1}*", anchor = False)
+        emp['company_name'] = st.text_input(f"Company Name", value=emp['company_name'], key=f"company_name_{i}")
+        emp['company_address'] = st.text_input(f"Company Address", value=emp['company_address'], key=f"company_address_{i}")
+        emp['company_tel_num'] = st.text_input(f"Company Telephone Number", value=emp['company_tel_num'], key=f"company_tel_num_{i}")
+        emp['position'] = st.text_input(f"Position", value=emp['position'], key=f"position_{i}")
+        emp['supervisor'] = st.text_input(f"Supervisor", value=emp['supervisor'], key=f"supervisor_{i}")
+        emp['date_worked_from'] = st.date_input(f"Date Worked From", value=pd.to_datetime(emp['date_worked_from']), key=f"date_worked_from_{i}")
+        emp['date_worked_to'] = st.date_input(f"Date Worked To", value=pd.to_datetime(emp['date_worked_to']), key=f"date_worked_to_{i}")
+        emp['wage'] = st.number_input(f"Wage Per Month", value=int(emp['wage']), key=f"wage_{i}")
+        emp['mgnt_ref_ck'] = st.text_input(f"Management Reference Checked By", value=emp['mgnt_ref_ck'], key=f"mgnt_ref_ck_{i}")
+        emp['reason_for_leaving'] = st.text_input(f"Reason for Leaving", value=emp['reason_for_leaving'], key=f"reason_for_leaving_{i}")
+        emp['permission'] = st.radio(f"Permission to Contact", ["Yes", "No"], index=0 if emp['permission'] == "Yes" else 1, key=f"permission_{i}")
         updated_employment_history.append(emp)
 
     st.write("Update References")
     updated_reference = []
     for i, ref in enumerate(references):
-        st.subheader(f"*Reference {i+1}*")
-        ref['ref_name'] = st.text_input(f"Reference Name", value=ref['ref_name'], key=f"ref_name_{i+1}")
-        ref['ref_tel_num'] = st.text_input(f"Reference Telephone Number", value=ref['ref_tel_num'], key=f"ref_tel_num_{i+1}")
-        ref['years_known'] = st.number_input(f"Years Known", value=int(ref['years_known']), key=f"years_known_{i+1}")
-        ref['ref_address'] = st.text_input(f"Reference Address", value=ref['ref_address'], key=f"ref_address_{i+1}")
+        st.subheader(f"*Reference {i+1}*", anchor = False)
+        ref['ref_name'] = st.text_input(f"Reference Name", value=ref['ref_name'], key=f"ref_name_{i}")
+        ref['ref_tel_num'] = st.text_input(f"Reference Telephone Number", value=ref['ref_tel_num'], key=f"ref_tel_num_{i}")
+        ref['years_known'] = st.number_input(f"Years Known", value=int(ref['years_known']), key=f"years_known_{i}")
+        ref['ref_address'] = st.text_input(f"Reference Address", value=ref['ref_address'], key=f"ref_address_{i}")
         updated_reference.append(ref)
 
     if st.button("Update"):
@@ -153,23 +157,23 @@ def admin_panel():
         st.write("Welcome, admin! You are logged in.")
         display_dataframes()
 
-    selected_id = st.text_input("Enter Employee Number to update/delete:")
+        selected_id = st.text_input("Enter Employee Number to update/delete:")
 
-    if st.button("Search"):
-        try:
-            if selected_id:
-                selected_id = int(selected_id)
-                st.session_state['selected_id'] = selected_id
-                st.session_state['applicant_info'] = get_applicant_info_by_emp_num(selected_id)
-                st.session_state['employment_history'] = get_employment_history_by_emp_num(selected_id)
-                st.session_state['references'] = get_references_by_emp_num(selected_id)
+        if st.button("Search"):
+            try:
+                if selected_id:
+                    selected_id = int(selected_id)
+                    st.session_state['selected_id'] = selected_id
+                    st.session_state['applicant_info'] = get_applicant_info_by_emp_num(selected_id)
+                    st.session_state['employment_history'] = get_employment_history_by_emp_num(selected_id)
+                    st.session_state['references'] = get_references_by_emp_num(selected_id)
                 
-                if st.session_state['applicant_info']:
-                    update_applicant_details()
-                else:
-                    st.warning("No record found for the given Employee Number")
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
+                    if st.session_state['applicant_info']:
+                        update_applicant_details()
+                        st.rerun()
+
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
 
     if 'selected_id' in st.session_state:
         update_applicant_details()
