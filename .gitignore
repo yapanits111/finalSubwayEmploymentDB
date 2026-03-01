@@ -1,5 +1,3 @@
-/.vscode
-/daa
-/escolar
-/IM
-/venv
+.env
+subwaydb.db
+.streamlit/secrets.toml

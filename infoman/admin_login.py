@@ -17,15 +17,17 @@ def logout():
 
 def admin_login():
     st.subheader("Admin Login")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type='password')
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        user_input = st.text_input("Username")
+        pass_input = st.text_input("Password", type='password')
 
-    if st.button("Login"):
-        if username == 'admin' and password == 'pass':
-            login()
-            st.success("Logged In as Admin")
-        else:
-            st.error("Incorrect username or password")
+        if st.button("Login"):
+            if user_input == st.secrets["username"] and pass_input == st.secrets["password"]:
+                login()
+                st.success("Logged In as Admin")
+            else:
+                st.error("Incorrect username or password")
 
 def display_dataframes():
     st.subheader("Admin Panel", anchor = False)
