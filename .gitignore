@@ -1,3 +1,2 @@
-.env
 subwaydb.db
 .streamlit/secrets.toml
