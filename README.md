@@ -138,22 +138,6 @@ infoman/
 └── README.md            # This file
 ```
 
-## Screenshots
-
-The application features a clean green-themed interface matching Subway's branding.
-
-### Home / Application Form
-![Application Form](screenshots/application_form.png)
-*Employment application form with personal information fields*
-
-### Admin Panel
-![Admin Panel](screenshots/admin_panel.png)
-*Admin dashboard showing all applicant data*
-
-### SQL Queries
-![SQL Queries](screenshots/sql_queries.png)
-*Pre-defined SQL queries for data analysis*
-
 ## License
 
 This project was developed for educational purposes at the Polytechnic University of the Philippines.
