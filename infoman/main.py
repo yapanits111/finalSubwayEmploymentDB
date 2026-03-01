@@ -1,13 +1,66 @@
 # main.py
 import os
 import streamlit as st
-from create_application import new_application
 from streamlit_option_menu import option_menu
-from admin_login import admin_panel 
-from sql_queries import sql_queries
 import pandas as pd
+from datetime import date
 
 st.set_page_config(page_title="Subway Application Management", page_icon=":sandwich:", layout="wide")
+
+# Initialize session state variables
+if 'logged_in' not in st.session_state:
+    st.session_state['logged_in'] = False
+
+if 'applicant_info' not in st.session_state:
+    st.session_state.applicant_info = {
+        'applicant_name': "",
+        'tax_ID_num': 0,
+        'applicant_address': "",
+        'applicant_tel_num': 0,
+        'age_verification': "Yes",
+        'emergency_name': "",
+        'emergency_tel_num': 0,
+        'emergency_address': "",
+        'position_type': "Part Time",
+        'total_hours': 0,
+        'date_availability': date.today(),
+        'school_name': "",
+        'school_address': "",
+        'school_tel_num': 0,
+        'counselor_name': "",
+        'grade_completed': 'Elementary',
+        'GWA': 0.0,
+        'graduated': "Yes",
+        'enrolled': "Yes"
+    }
+
+if 'employment_history' not in st.session_state:
+    st.session_state.employment_history = [{
+        'company_name': "",
+        'company_address': "",
+        'company_tel_num': 0,
+        'position': "",
+        'supervisor': "",
+        'date_worked_from': date.today(),
+        'date_worked_to': date.today(),
+        'wage': 0,
+        'mgnt_ref_ck': "",
+        'reason_for_leaving': "",
+        'permission': "Yes"
+    }]
+
+if 'references' not in st.session_state:
+    st.session_state.references = [{
+        'ref_name': "",
+        'ref_tel_num': 0,
+        'years_known': 0,
+        'ref_address': ""
+    }]
+
+# Import after session state initialization
+from create_application import new_application
+from admin_login import admin_panel 
+from sql_queries import sql_queries
 
 st.markdown(
     '''
@@ -22,6 +75,13 @@ st.markdown(
         }
         [data-testid="stSidebarContent"]{
             background-color: #0D4E16;
+        }
+        
+        /* Fixed width main content */
+        .main .block-container {
+            max-width: 1200px;
+            padding-left: 2rem;
+            padding-right: 2rem;
         }
     </style>
     ''',
