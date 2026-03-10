@@ -1,2 +1,3 @@
 subwaydb.db
-.streamlit/secrets.toml
+**/.streamlit/secrets.toml
+*.toml
