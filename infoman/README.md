@@ -101,13 +101,13 @@ infoman/
 ## Screenshots
 
 ### Application Form
-![Application Form](screenshots/application_form.png)
+![Application Form](image-1.png)
 
 ### Admin Login
-![Admin Login](screenshots/admin_panel.png)
+![Admin Login](image.png)
 
 ### SQL Queries
-![SQL Queries](screenshots/sql_queries.png)
+![SQL Queries](image-2.png)
 
 ## Security Notes
 
